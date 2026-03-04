@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Landing - Header</title>
+    <link rel="stylesheet" href="assets/css/styles.css" />
+  </head>
+
+  <body>
+    <header class="hero-header">
+      <nav class="navbar">
+        <div class="nav-left">
+          <a href="#" class="logo-link" aria-label="Inicio">
+            <img src="assets/img/logo3.png" alt="Global Soluciones" class="logo" />
+          </a>
+        </div>
+
+        <div class="nav-right">
+          <ul class="nav-links">
+            <li><a href="#">Tienda</a></li>
+            <li><a href="#">Mi cuenta</a></li>
+          </ul>
+
+          <div class="nav-search">
+            <input type="search" placeholder="Buscar" aria-label="Buscar" />
+          </div>
+        </div>
+      </nav>
+
+      <div class="hero-media">
+        <!-- Slideshow (se activa cuando termina el video) -->
+        <div id="heroSlideshow" class="hero-slideshow" aria-hidden="true"></div>
+
+        <!-- Video (una sola vez: SIN loop) -->
+        <video id="heroVideo" class="hero-video" autoplay muted playsinline>
+          <source src="assets/videos/main1.mp4" type="video/mp4" />
+          Tu navegador no soporta video HTML5.
+        </video>
+
+        <button
+          id="volumeToggle"
+          class="volume-toggle is-muted"
+          aria-label="Activar sonido"
+          aria-pressed="false"
+          type="button"
+        >
+          <svg class="volume-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path class="icon-speaker" d="M4 9v6h4l5 4V5L8 9H4z" />
+            <path class="icon-wave" d="M16 8c1.5 1.5 1.5 6.5 0 8" />
+          </svg>
+        </button>
+
+        <!-- Overlay de fin de video (logo grande -> dock a esquina). IMPORTANTE para el main.js -->
+        <div id="videoEndOverlay" class="video-end-overlay" aria-hidden="true">
+			<div class="overlay-inner">
+			<img src="assets/img/logo1.png" alt="Global Soluciones" class="logo-final" />
+			</div>
+        </div>
+
+        <!-- Contenido central (solo debe aparecer al terminar el video) -->
+        <div class="hero-content" aria-hidden="true">
+          <h2 class="hero-claim">Servicios pensados para vos, desde Misiones</h2>
+
+          <a href="#next-section" id="heroMore" class="hero-more">
+			SABER MÁS
+			<span class="arrow"></span>
+		  </a>
+        </div>
+      </div>
+    </header>
+
+	<!-- SECCION SERVICIOS -->
+<section id="next-section" class="gs-services">
+  <div class="gs-services__inner">
+		<div class="gs-cards">
+
+			<!-- MOTOS -->
+			<article class="gs-card"
+			data-folder="assets/img"
+			data-images="motos1,motos2,motos3,moto4,motos5,motos6,motos7"
+			aria-label="Motos"
+			>
+			<img class="gs-card__img" src="assets/img/motos1.jpg" alt="Motos" loading="lazy" />
+
+			<div class="gs-card__caption">
+				<span class="gs-card__line" aria-hidden="true"></span>
+				<h3 class="gs-card__title">MOTOS</h3>
+			</div>
+
+			<div class="gs-card__info">
+				<p>Financiación simple y accesible para que llegues a tu moto con cuotas accesibles.</p>
+			</div>
+			</article>
+
+			<!-- AUTOS -->
+			<article class="gs-card"
+			data-folder="assets/img"
+			data-images="autos1,autos2,autos3"
+			aria-label="Autos"
+			>
+			<img class="gs-card__img" src="assets/img/autos1.png" alt="Autos" loading="lazy" />
+
+			<div class="gs-card__caption">
+				<span class="gs-card__line" aria-hidden="true"></span>
+				<h3 class="gs-card__title">AUTOS</h3>
+			</div>
+
+			<div class="gs-card__info">
+				<p>Planes flexibles para tu vehículo, con acompañamiento de principio a fin.</p>
+			</div>
+			</article>
+
+			<!-- HOGAR -->
+			<article class="gs-card"
+			data-folder="assets/img"
+			data-images="electrodomésticos1,electrodomésticos2,electrodomésticos3"
+			aria-label="Hogar"
+			>
+			<img class="gs-card__img" src="assets/img/electrodomésticos1.jpeg" alt="Hogar" loading="lazy" />
+
+			<div class="gs-card__caption">
+				<span class="gs-card__line" aria-hidden="true"></span>
+				<h3 class="gs-card__title">HOGAR</h3>
+			</div>
+
+			<div class="gs-card__info">
+				<p>Equipá tu casa con electrodomésticos y productos esenciales en cuotas.</p>
+			</div>
+			</article>
+
+		</div>
+
+			<!-- TEXTO DE SECCION -->
+		<div class="gs-services-text">
+
+			<div class="gs-services-label">
+			<span class="gs-line"></span>
+			<span class="gs-label-text">Hecho en Misiones</span>
+			<span class="gs-line"></span>
+			</div>
+
+			<h2 class="gs-services-title">
+			Servicios pensados para vos
+			</h2>
+
+			<p class="gs-services-description">
+			Te acompañamos para que accedas a tu moto o vehículo
+			con planes accesibles, simples y claros.
+			</p>
+
+		</div>
+  </div>
+</section>
+    <script src="assets/js/main.js"></script>
+  </body>
+</html>
