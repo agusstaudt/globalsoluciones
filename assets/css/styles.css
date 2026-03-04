@@ -1,0 +1,879 @@
+/* =========================
+   Global Soluciones
+   Hero Video -> Slideshow + Glass Navbar
+   ========================= */
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
+
+/* Reset */
+/* Reset */
+*{ box-sizing:border-box; }
+
+/* en vez de height:100% */
+html, body{
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body{
+  height: auto; /* clave: que el body pueda crecer */
+}
+
+:root{
+  --gold: #b08a3b;
+  --bg-base: #0f0f10;
+
+  /* Navbar */
+  --nav-top: 20px;
+  --nav-x: 40px;
+  --nav-h: 90px;
+
+  /* Fondo integrado (más sutil, menos “difuminado feo”) */
+  --bg-soft-opacity: .55;  /* bajalo/subilo */
+  --bg-soft-blur: 18px;    /* bajalo/subilo */
+  --bg-soft-sat: 120%;
+
+  /* Presencia frase */
+  --claim-max: 1100px;
+}
+
+body{
+  margin:0;
+  font-family:"Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-weight:400;
+  color:#111;
+  background: var(--bg-base);
+}
+
+/* =========================
+   HERO
+   ========================= */
+
+.hero-header{
+  position:relative;
+  height:100vh;
+  min-height:600px;
+  background: var(--bg-base);
+}
+
+.hero-media{
+  position:relative;
+  height:100%;
+  overflow:hidden;
+  background: var(--bg-base);
+}
+
+/* Fondo “integrado” (pero sutil, no invade) */
+.hero-media::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+
+  background-image: var(--blur-bg, url("../img/main1.jpg"));
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+
+  filter: blur(var(--bg-soft-blur)) saturate(var(--bg-soft-sat));
+  transform: scale(1.08);
+  opacity: var(--bg-soft-opacity);
+}
+
+/* Capa de contraste suave (mejora legibilidad sin “ensuciar”) */
+.hero-media::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.10) 45%, rgba(0,0,0,.45));
+}
+
+/* =========================
+   VIDEO + SLIDESHOW (FULL)
+   ========================= */
+
+.hero-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  z-index:2;
+}
+
+.hero-video.is-hidden{
+  opacity:0;
+  transition: opacity 1.0s ease;
+  pointer-events:none;
+}
+
+.hero-slideshow{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:2;
+  opacity:0;
+  pointer-events:none;
+}
+
+.hero-slideshow.is-visible{
+  opacity:1;
+  transition: opacity 1.0s ease;
+}
+
+.hero-slide{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition: opacity 1.2s ease;
+}
+.hero-slide.is-active{ opacity:1; }
+
+/* =========================
+   NAVBAR (glass)
+   ========================= */
+
+.navbar{
+  position:fixed;
+  top: var(--nav-top);
+  left: var(--nav-x);
+  right: var(--nav-x);
+  height: var(--nav-h);
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 60px;
+
+  z-index:50;
+
+  background: linear-gradient(to bottom, rgba(20,20,22,0.62), rgba(20,20,22,0.42));
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,0.08);
+
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.06);
+}
+
+.nav-left .logo{
+  height:82px;
+  display:block;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.12));
+}
+
+.nav-right{ display:flex; align-items:center; gap:34px; }
+
+.nav-links{
+  list-style:none;
+  margin:0;
+  padding:0;
+  display:flex;
+  gap:28px;
+}
+
+.nav-links a{
+  color:#fff;
+  text-decoration:none;
+  font-size:18px;
+  font-weight:500;
+  letter-spacing:.2px;
+  position:relative;
+  transition: color .18s ease;
+}
+.nav-links a:hover{ color: var(--gold); }
+
+.nav-links a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-8px;
+  width:100%;
+  height:2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  transform: scaleX(0);
+  transform-origin:center;
+  transition: transform .2s ease;
+  opacity:.9;
+}
+.nav-links a:hover::after{ transform: scaleX(1); }
+
+.nav-search input{
+  width:280px;
+  padding:13px 18px;
+  border-radius:999px;
+
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.08);
+
+  color:#fff;
+  font-size:15px;
+  outline:none;
+  font-family:inherit;
+
+  backdrop-filter: blur(8px);
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.nav-search input::placeholder{ color: rgba(255,255,255,.60); }
+.nav-search input:focus{
+  background: rgba(255,255,255,.14);
+  border-color: rgba(176,138,59,.45);
+  box-shadow: 0 0 0 4px rgba(176,138,59,.14);
+}
+
+/* =========================
+   OVERLAY LOGO (solo logo)
+   - aparece al terminar el video
+   - luego: fade out y aparece chico en esquina
+   ========================= */
+
+.video-end-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+  visibility:hidden;
+  background: rgba(0,0,0,0);
+
+  transition: opacity .9s ease, visibility .3s ease, background .9s ease;
+  z-index:20;
+  pointer-events:none;
+}
+
+.video-end-overlay.visible{
+  opacity:1;
+  visibility:visible;
+  background: rgba(0,0,0,0.18);
+}
+
+.overlay-inner{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+
+  transform: translateY(10px) scale(0.985);
+  filter: blur(6px);
+  opacity:0;
+
+  transition:
+    transform .95s cubic-bezier(.2,.9,.2,1),
+    filter .95s ease,
+    opacity .95s ease;
+}
+.video-end-overlay.visible .overlay-inner{
+  transform: translateY(0) scale(1);
+  filter: blur(0);
+  opacity:1;
+}
+
+/* Logo grande */
+.logo-final{
+  width:360px;
+  max-width:85%;
+  height:auto;
+
+  opacity:1;
+  transform:scale(1);
+  transition:
+    opacity .55s ease,
+    transform .55s ease;
+
+  filter:
+    drop-shadow(0 12px 28px rgba(0,0,0,.35))
+    drop-shadow(0 0 18px rgba(176,138,59,.18));
+}
+
+/* Si todavía existe overlay-note en tu HTML, lo ocultamos */
+.overlay-note{ display:none !important; }
+
+/* Estado: dock (fade-out + aparece chico) */
+.video-end-overlay.is-docked{
+  align-items:flex-end;
+  justify-content:flex-start;
+  padding:0 0 36px 36px;
+  background: rgba(0,0,0,0.10);
+}
+
+/* el grande se va */
+.video-end-overlay.is-docked .logo-final{
+  opacity:0;
+  transform:scale(.86);
+}
+
+/* aparece versión chica (sin movimiento) */
+.video-end-overlay.is-docked::after{
+  content:"";
+  position:absolute;
+  left:36px;
+  bottom:36px;
+
+  width:150px;
+  height:150px;
+
+  background-image:url("../img/logo1.png");
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:left bottom;
+
+  opacity:0;
+  transform:scale(.92);
+  animation: smallLogoIn .55s ease forwards;
+  animation-delay: .25s; /* delay para que se note el “corte” grande->chico */
+}
+
+@keyframes smallLogoIn{
+  to { opacity:1; transform:scale(1); }
+}
+
+/* =========================
+   HERO CONTENT (frase + ver más)
+   - aparece recién al terminar el video
+   - con presencia y alineado
+   ========================= */
+
+.hero-content{
+  position:absolute;
+  left:50%;
+  bottom:92px;
+  transform: translateX(-50%) translateY(14px);
+  z-index:18; /* arriba de slides, abajo del overlay */
+  width:min(var(--claim-max), calc(100% - 80px));
+  text-align:center;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transition:
+    opacity .85s ease,
+    transform .85s cubic-bezier(.2,.9,.2,1),
+    visibility 0s linear .85s;
+}
+
+.hero-content.is-visible{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform: translateX(-50%) translateY(0);
+  transition:
+    opacity .85s ease,
+    transform .85s cubic-bezier(.2,.9,.2,1),
+    visibility 0s;
+}
+
+/* Banda sutil detrás del texto (NO blur, NO “botón feo”) */
+.hero-content::before{
+  content:"";
+  position:absolute;
+  inset:-18px -18px -22px -18px;
+  z-index:-1;
+  border-radius: 22px;
+
+  background:
+    radial-gradient(circle at 50% 20%, rgba(176,138,59,.14), transparent 55%),
+    linear-gradient(to bottom, rgba(0,0,0,.38), rgba(0,0,0,.14));
+  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 18px 55px rgba(0,0,0,.40);
+}
+
+/* Frase con más presencia + “destello” dorado sutil */
+.hero-claim{
+  margin:0 0 18px 0;
+  color:#fff;
+
+  font-family:"Montserrat", sans-serif;
+  font-weight:400;
+  font-size: clamp(34px, 4.6vw, 40px);
+  line-height:1.12;
+  letter-spacing:-0.4px;
+
+  text-shadow:
+    0 10px 44px rgba(0,0,0,.55),
+    0 2px 12px rgba(0,0,0,.35);
+}
+
+.hero-claim .gold{
+  color: #fff;
+  text-shadow:
+    0 10px 44px rgba(0,0,0,.55),
+    0 0 14px rgba(176,138,59,.35);
+}
+
+/* “VER MÁS” minimal (sin botón sólido) */
+.hero-more{
+  display:inline-flex;
+  align-items:center;
+  flex-direction: column;
+  gap:12px;
+
+  padding:14px 26px;
+  border-radius:999px;
+
+  font-size:14px;
+  letter-spacing:2.5px;
+  font-weight:700;
+  text-transform:uppercase;
+  text-decoration:none;
+
+  color:#fff;
+
+  border:1px solid rgba(176,138,59,.55);
+
+  background:
+    linear-gradient(135deg,
+      rgba(176,138,59,.18),
+      rgba(176,138,59,.08)
+    );
+
+  backdrop-filter: blur(6px);
+
+  box-shadow:
+    0 12px 32px rgba(0,0,0,.35),
+    0 0 18px rgba(176,138,59,.18);
+
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    background .28s ease,
+    border-color .28s ease;
+}
+
+.hero-more:hover{
+  transform: translateY(-3px);
+  border-color: rgba(176,138,59,.85);
+
+  background:
+    linear-gradient(135deg,
+      rgba(176,138,59,.28),
+      rgba(176,138,59,.12)
+    );
+
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.45),
+    0 0 26px rgba(176,138,59,.35);
+}
+
+/* Flecha dorada tipo V */
+.hero-more .arrow{
+  width:20px;
+  height:20px;
+  border-left:3px solid var(--gold);
+  border-bottom:3px solid var(--gold);
+  transform: rotate(-45deg);
+  transition: transform .28s ease;
+  filter: drop-shadow(0 0 10px rgba(176,138,59,.35));
+}
+
+.hero-more:hover .arrow{
+  transform: rotate(-45deg) translateY(6px);
+}
+
+/* micro “respira” */
+.hero-content.is-visible .hero-more .arrow{
+  animation: arrowFloat 1.8s ease-in-out infinite;
+}
+@keyframes arrowFloat{
+  0%,100%{ transform: rotate(-45deg) translateY(0); }
+  50%{ transform: rotate(-45deg) translateY(4px); }
+}
+
+.hero-content { pointer-events: none; }
+.hero-content.is-visible { pointer-events: auto; }
+
+/* CTA: mostrar SOLO el botón antes (durante el video) */
+.hero-more {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity .55s ease, transform .55s ease;
+}
+
+.hero-more.is-early {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+/* =========================
+   VOLUMEN
+   ========================= */
+
+.volume-toggle{
+  position:absolute;
+  bottom:28px;
+  right:40px;
+
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:none;
+  background:transparent;
+  cursor:pointer;
+
+  opacity:.55;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index:25;
+}
+.volume-toggle:hover{ opacity:1; transform:scale(1.08); }
+
+.volume-icon{
+  width:20px;
+  height:20px;
+  fill:#fff;
+  stroke:#fff;
+  stroke-width:1.6;
+}
+.icon-wave{ fill:none; stroke-linecap:round; }
+
+.volume-toggle.is-muted .icon-wave{ display:none; }
+
+.volume-toggle::after{
+  content:"";
+  position:absolute;
+  width:26px;
+  height:2px;
+  background: var(--gold);
+  border-radius:2px;
+  transform: rotate(-45deg);
+  opacity:0;
+  transition: opacity .2s ease;
+}
+.volume-toggle.is-muted::after{ opacity:1; }
+
+.volume-toggle.is-hidden{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 900px){
+  :root{ --nav-x: 18px; --nav-h: 82px; }
+
+  .navbar{ padding: 0 26px; }
+  .nav-right{ gap:18px; }
+  .nav-links{ gap:18px; }
+  .nav-links a{ font-size:16px; }
+  .nav-search input{ width:190px; }
+  .nav-left .logo{ height:62px; }
+
+  .hero-content{ bottom:76px; width: calc(100% - 36px); }
+}
+
+@media (max-width: 600px){
+  .nav-links{ display:none; }
+  .nav-search input{ width:160px; }
+  .navbar{ padding: 0 18px; }
+
+  .hero-claim{ font-size: clamp(26px, 7vw, 40px); }
+  .video-end-overlay.is-docked{
+    padding: 0 0 22px 18px;
+  }
+  .video-end-overlay.is-docked::after{
+    left:18px; bottom:22px; width:120px; height:120px;
+  }
+}
+
+/* ====== Modo CTA temprano (solo botón) ====== */
+.hero-content.is-cta{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity .55s ease, transform .55s ease, visibility 0s;
+}
+.hero-content.is-cta{
+  bottom:70px;
+}
+/* En modo CTA temprano NO mostrar el recuadro */
+.hero-content.is-cta::before{
+  display:none;
+}
+/* En modo CTA: ocultamos la frase */
+.hero-content.is-cta .hero-claim{
+  display:none;
+}
+
+/* Botón oculto por defecto, aparece con is-early */
+.hero-more{
+  opacity:0;
+  transform: translateY(8px);
+  pointer-events:none;
+  transition: opacity .55s ease, transform .55s ease;
+}
+
+.hero-more.is-early{
+  opacity:1;
+  transform: translateY(0);
+  pointer-events:auto;
+}
+/* Cuando aparece el contenido final (frase), el botón siempre visible */
+.hero-content.is-visible .hero-more{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+
+/* =========================
+   FIN HERO
+   ========================= */
+
+
+/* =========================
+   GS SERVICES (cards)
+   ========================= */
+
+.gs-services{
+  padding: 80px 0;
+  background: #f3efe8; /* o el fondo que elijas */
+}
+
+.gs-services__inner{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+.gs-cards{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+@media (max-width: 980px){
+  .gs-cards{ grid-template-columns: 1fr; }
+}
+
+/* =========================
+   CARD
+   ========================= */
+
+.gs-card{
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #1b1b1b;
+
+  /* ✅ borde negro */
+  border: 6px solid #121212;
+
+  box-shadow: 0 18px 45px rgba(0,0,0,.18);
+}
+
+/* IMG */
+.gs-card__img{
+  width: 100%;
+  height: 520px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity .45s ease, transform .35s ease;
+}
+
+/* =========================
+   CAPTION (título siempre visible)
+   ========================= */
+
+.gs-card__caption{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+
+  padding: 16px 18px 18px;
+  height: 92px;                 /* banda chica siempre */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+
+  background: rgba(10,10,10,.48);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  transition: transform .35s ease, opacity .35s ease;
+  z-index: 3;
+}
+
+/* ✅ línea dorada MÁS cerca del título */
+.gs-card__line{
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #b08a3b;
+  opacity: .95;
+  border-radius: 2px;
+  transform: translateY(4px); /* más cerca del título */
+}
+
+.gs-card__title{
+  margin: 0;
+  color: #fff;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  font-size: 22px;
+  transform: translateY(0);
+  transition: transform .35s ease;
+}
+
+/* =========================
+   INFO (solo aparece en hover)
+   ========================= */
+
+.gs-card__info{
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+
+  padding: 18px 18px 18px;
+  height: 170px;                /* panel grande */
+  display: flex;
+  align-items: flex-end;
+
+  /* ✅ recuadro grande solo en hover */
+  background: rgba(10,10,10,.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+
+  transition: opacity .25s ease, transform .35s ease;
+  z-index: 2;
+}
+
+.gs-card__info p{
+  margin: 0;
+  color: rgba(255,255,255,.82);
+  font-size: 14.5px;
+  line-height: 1.35;
+}
+
+/* =========================
+   HOVER / FOCUS
+   ========================= */
+
+.gs-card:hover .gs-card__img,
+.gs-card:focus-within .gs-card__img{
+  transform: scale(1.03);
+}
+
+/* ✅ el título “sube” y deja lugar al texto */
+.gs-card:hover .gs-card__caption,
+.gs-card:focus-within .gs-card__caption{
+  transform: translateY(-86px); /* mueve la banda hacia arriba */
+}
+
+.gs-card:hover .gs-card__title,
+.gs-card:focus-within .gs-card__title{
+  transform: translateY(-2px);
+}
+
+/* ✅ aparece el panel grande con texto SIN pisar el título */
+.gs-card:hover .gs-card__info,
+.gs-card:focus-within .gs-card__info{
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* =========================
+   TEXTO SECCION SERVICIOS
+   ========================= */
+
+.gs-services-text{
+  margin-top: 60px;
+  text-align: center;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* línea + texto */
+.gs-services-label{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.gs-line{
+  flex: 1;
+  max-width: 80px;
+  height: 2px;
+  background: #b08a3b;
+  opacity: .8;
+}
+
+.gs-label-text{
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #b08a3b;
+  letter-spacing: .6px;
+}
+
+/* título principal */
+.gs-services-title{
+  margin: 0 0 14px 0;
+  font-family: "Montserrat", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+/* descripción */
+.gs-services-description{
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: #5b5b5b;
+}
+
+.gs-services-bg{
+  position: relative;
+  background-image: url("assets/img/misiones.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.gs-services-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(
+    to top,
+    #ffffff 0%,
+    #ffffff 55%,
+    rgba(255,255,255,0.7) 70%,
+    rgba(255,255,255,0) 100%
+  );
+}
+
