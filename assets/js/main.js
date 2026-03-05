@@ -179,19 +179,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Transition: video -> slideshow
   // =========================
   async function transitionToSlideshow() {
-    if (!video || transitioning) return;
-
-    // Al pasar a imágenes: salimos del modo "solo CTA"
-    if (heroContent) heroContent.classList.remove("is-cta");
-    // if (heroMore) heroMore.classList.remove("is-early");
-
+    // Ya se mostró el overlay → ya transicionó, no repetir
     if (overlay && overlay.classList.contains("visible")) return;
+    // Ya está en proceso → no repetir
+    if (transitioning) return;
 
     transitioning = true;
 
+    // Al pasar a imágenes: salimos del modo "solo CTA"
+    if (heroContent) heroContent.classList.remove("is-cta");
+
+    // Construir lista de imágenes si todavía no se hizo
+    // (puede tardar en producción — por eso lo hacemos ANTES de la UI)
     if (!images.length) await buildImagesList();
     if (!slides.length) buildSlides();
 
+    // Mostrar slideshow
     if (slideshowEl) {
       slideshowEl.classList.add("is-visible");
       slideshowEl.setAttribute("aria-hidden", "false");
@@ -209,14 +212,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // overlay (logo grande)
     showOverlay();
 
-    // mostrar frase/botón (junto al logo grande si delay=0)
+    // mostrar frase/botón
     setTimeout(showHeroContent, HERO_CONTENT_DELAY_MS);
 
     // fade out video + ocultar volumen
     video.classList.add("is-hidden");
     if (volumeBtn) volumeBtn.classList.add("is-hidden");
 
-    // loop
+    // iniciar loop de slideshow
     startLoop();
 
     // pausar video
@@ -224,9 +227,10 @@ document.addEventListener("DOMContentLoaded", () => {
       try { video.pause(); } catch (e) {}
     }, 120);
 
-    // dock (grande->chico) DESPUÉS de X ms
+    // dock logo (grande -> chico) después de X ms
     setTimeout(dockLogo, HOLD_CENTER_MS);
 
+    // Liberar flag DESPUÉS de todo lo sincrónico
     transitioning = false;
   }
 
@@ -240,14 +244,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Aparecen apenas carga la página
   showArrows();
 
+  // Precargar lista de imágenes en background para que al hacer click ya esté lista
+  buildImagesList().catch(() => {});
+
   if (nextBtn) {
     nextBtn.addEventListener("click", async () => {
-      // Si el video todavía está corriendo → saltar al slideshow
-      if (video && !video.paused && !video.ended) {
+      // Si el slideshow todavía no está visible → el video está activo, saltar al slideshow
+      const slideshowActive = slideshowEl && slideshowEl.classList.contains("is-visible");
+      if (!slideshowActive) {
         await transitionToSlideshow();
         return;
       }
-      // Si ya estamos en el slideshow → slide siguiente
+      // Ya estamos en el slideshow → slide siguiente
       if (slides.length) {
         pauseAutoplay();
         goToSlide(current + 1);
@@ -297,21 +305,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (prevBtn) {
     prevBtn.addEventListener("click", async () => {
-      // Si el video todavía corre → retroceder 8 segundos
-      if (video && !video.paused && !video.ended) {
-        video.currentTime = Math.max(0, video.currentTime - 8);
+      const slideshowActive = slideshowEl && slideshowEl.classList.contains("is-visible");
+      // Si el slideshow no está visible → video activo → retroceder 8 segundos
+      if (!slideshowActive) {
+        if (video) video.currentTime = Math.max(0, video.currentTime - 8);
         return;
       }
-      // Si estamos en el slideshow en el primer slide → volver al video
-      if (slides.length && current === 0) {
+      // Slideshow activo: primer slide → volver al video
+      if (current === 0) {
         backToVideo();
         return;
       }
-      // Si estamos en el slideshow en otro slide → slide anterior
-      if (slides.length) {
-        pauseAutoplay();
-        goToSlide(current - 1);
-      }
+      // Slideshow activo: otro slide → slide anterior
+      pauseAutoplay();
+      goToSlide(current - 1);
     });
   }
 
