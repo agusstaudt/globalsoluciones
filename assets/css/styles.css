@@ -1055,3 +1055,142 @@ body{
     object-position: center;
   }
 }
+/* =========================
+   HERO ARROWS (prev / next)
+   ========================= */
+
+.hero-arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(15,15,16,.45);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  cursor: pointer;
+  color: #fff;
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) scale(.88);
+
+  transition:
+    opacity .35s ease,
+    visibility .35s ease,
+    transform .35s ease,
+    background .2s ease,
+    border-color .2s ease;
+
+  outline: none;
+}
+
+.hero-arrow.is-ready{
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) scale(1);
+}
+
+.hero-arrow:hover{
+  background: rgba(176,138,59,.32);
+  border-color: rgba(176,138,59,.55);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.hero-arrow:active{
+  transform: translateY(-50%) scale(.96);
+}
+
+.hero-arrow--prev{ left: 28px; }
+.hero-arrow--next{ right: 28px; }
+
+.hero-arrow svg{
+  width: 22px;
+  height: 22px;
+  stroke: #fff;
+  stroke-width: 2.2;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  transition: stroke .2s ease;
+}
+
+.hero-arrow:hover svg{
+  stroke: var(--gold);
+}
+
+@media (max-width: 480px){
+  .hero-arrow{
+    width: 40px;
+    height: 40px;
+  }
+  .hero-arrow--prev{ left: 12px; }
+  .hero-arrow--next{ right: 12px; }
+  .hero-arrow svg{ width: 17px; height: 17px; }
+}
+/* =========================
+   ANIMACIONES DE ENTRADA (scroll reveal)
+   Controladas por IntersectionObserver en main.js
+   ========================= */
+
+/* --- Estado inicial: todos los elementos animables están ocultos --- */
+[data-reveal] {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+/* Desde abajo (cards, textos) */
+[data-reveal="up"] {
+  transform: translateY(48px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.9,.2,1);
+}
+
+/* Desde izquierda (lado texto del split) */
+[data-reveal="left"] {
+  transform: translateX(-52px);
+  transition: opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1);
+}
+
+/* Desde derecha (imagen del split) */
+[data-reveal="right"] {
+  transform: translateX(52px);
+  transition: opacity .75s ease, transform .75s cubic-bezier(.2,.9,.2,1);
+}
+
+/* Fade puro (label, líneas decorativas) */
+[data-reveal="fade"] {
+  transition: opacity .8s ease;
+}
+
+/* --- Estado final: visible --- */
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Delays escalonados para grupos (ej: las 3 cards) --- */
+[data-delay="100"] { transition-delay: .10s; }
+[data-delay="200"] { transition-delay: .20s; }
+[data-delay="250"] { transition-delay: .25s; }
+[data-delay="320"] { transition-delay: .32s; }
+[data-delay="400"] { transition-delay: .40s; }
+
+/* respeta preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

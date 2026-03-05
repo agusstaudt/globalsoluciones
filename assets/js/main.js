@@ -1,4 +1,3 @@
-
 /// ================================= HERO =====================================================
 document.addEventListener("DOMContentLoaded", () => {
   const video = document.getElementById("heroVideo");
@@ -8,6 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroContent = document.querySelector(".hero-content");
   const heroMore = document.querySelector(".hero-more");
   const nextSection = document.getElementById("next-section");
+  const prevBtn = document.getElementById("heroPrev");
+  const nextBtn = document.getElementById("heroNext");
 
   // =========================
   // CONFIG
@@ -37,6 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let current = 0;
   let timer = null;
   let transitioning = false;
+  let userPaused = false;       // el usuario navegó manualmente
+  let resumeTimer = null;       // timer para reanudar autoplay
 
   // =========================
   // VOLUME
@@ -112,20 +115,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Navegar a un slide específico
+  function goToSlide(idx) {
+    if (!slides.length) return;
+    slides[current].classList.remove("is-active");
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add("is-active");
+    try {
+      document.documentElement.style.setProperty("--blur-bg", `url("${images[current]}")`);
+    } catch (e) {}
+  }
+
+  // Pausa temporal del autoplay cuando el usuario navega manualmente
+  const RESUME_DELAY_MS = 6000;
+  function pauseAutoplay() {
+    userPaused = true;
+    if (resumeTimer) clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => { userPaused = false; }, RESUME_DELAY_MS);
+  }
+
   function startLoop() {
     if (timer) clearInterval(timer);
     if (!slides.length) return;
 
     timer = setInterval(() => {
-      const prev = current;
-      current = (current + 1) % slides.length;
-      slides[prev].classList.remove("is-active");
-      slides[current].classList.add("is-active");
-
-      // actualizar fondo suave para “integrar” con la imagen actual
-      try {
-        document.documentElement.style.setProperty("--blur-bg", `url("${images[current]}")`);
-      } catch (e) {}
+      if (!userPaused) goToSlide(current + 1);
     }, SLIDE_MS);
   }
 
@@ -216,6 +230,91 @@ document.addEventListener("DOMContentLoaded", () => {
     transitioning = false;
   }
 
+  // =========================
+  // FLECHAS: mostrar desde el inicio y conectar lógica
+  // =========================
+  function showArrows() {
+    if (prevBtn) prevBtn.classList.add("is-ready");
+    if (nextBtn) nextBtn.classList.add("is-ready");
+  }
+  // Aparecen apenas carga la página
+  showArrows();
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", async () => {
+      // Si el video todavía está corriendo → saltar al slideshow
+      if (video && !video.paused && !video.ended) {
+        await transitionToSlideshow();
+        return;
+      }
+      // Si ya estamos en el slideshow → slide siguiente
+      if (slides.length) {
+        pauseAutoplay();
+        goToSlide(current + 1);
+      }
+    });
+  }
+
+  // Volver al video desde el slideshow
+  function backToVideo() {
+    if (!video) return;
+
+    // Detener autoplay de slides
+    if (timer) { clearInterval(timer); timer = null; }
+    userPaused = false;
+
+    // Ocultar slideshow
+    if (slideshowEl) {
+      slideshowEl.classList.remove("is-visible");
+      slideshowEl.setAttribute("aria-hidden", "true");
+    }
+
+    // Ocultar overlay del logo y hero content
+    if (overlay) {
+      overlay.classList.remove("visible", "is-docked");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+    if (heroContent) {
+      heroContent.classList.remove("is-visible", "is-cta");
+    }
+
+    // Volver a mostrar el video y el botón de volumen
+    video.classList.remove("is-hidden");
+    if (volumeBtn) volumeBtn.classList.remove("is-hidden");
+
+    // Reiniciar video desde el principio
+    video.currentTime = 0;
+    video.play().catch(() => {});
+
+    // Resetear flag para que transitionToSlideshow pueda correr de nuevo
+    transitioning = false;
+
+    // Limpiar slides para que se reconstruyan en la próxima transición
+    slides = [];
+    if (slideshowEl) slideshowEl.innerHTML = "";
+    current = 0;
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", async () => {
+      // Si el video todavía corre → retroceder 8 segundos
+      if (video && !video.paused && !video.ended) {
+        video.currentTime = Math.max(0, video.currentTime - 8);
+        return;
+      }
+      // Si estamos en el slideshow en el primer slide → volver al video
+      if (slides.length && current === 0) {
+        backToVideo();
+        return;
+      }
+      // Si estamos en el slideshow en otro slide → slide anterior
+      if (slides.length) {
+        pauseAutoplay();
+        goToSlide(current - 1);
+      }
+    });
+  }
+
   if (video) video.addEventListener("ended", transitionToSlideshow);
 
   if (video) {
@@ -232,14 +331,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   // Scroll suave SABER MÁS
   // =========================
-  const SCROLL_DURATION_MS = 1000;
+  const SCROLL_DURATION_MS = 2200;
 
   function smoothScrollTo(targetY, duration = 1600) {
     const startY = window.pageYOffset;
     const diff = targetY - startY;
     const start = performance.now();
 
-    const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+    const ease = (t) => t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
 
     function step(now) {
       const t = Math.min(1, (now - start) / duration);
@@ -424,3 +523,33 @@ document.addEventListener("DOMContentLoaded", () => {
   const splitMedia = document.querySelector(".gs-split__media[data-images]");
   if (splitMedia) initSplitRotator(splitMedia);
 });
+
+/// ================================= SCROLL REVEAL =====================================================
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Todos los elementos con data-reveal
+  const targets = document.querySelectorAll("[data-reveal]");
+  if (!targets.length) return;
+
+  // Si el navegador no soporta IntersectionObserver, los mostramos todos directamente
+  if (!("IntersectionObserver" in window)) {
+    targets.forEach(el => el.classList.add("is-revealed"));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-revealed");
+        // Una vez animado, dejamos de observarlo
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15,       // se activa cuando el 15% del elemento es visible
+    rootMargin: "0px 0px -40px 0px"  // margen inferior: no dispara antes de que entre bien
+  });
+
+  targets.forEach(el => observer.observe(el));
+});
+/// ================================= FIN SCROLL REVEAL =====================================================
