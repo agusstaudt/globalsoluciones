@@ -918,20 +918,6 @@ body{
   position: relative;
 }
 
-/* Logo grande de fondo (izquierda) */
-.gs-split__left::before{
-  content:"";
-  position:absolute;
-  left: -140px;              /* lo empuja hacia afuera como el ejemplo */
-  bottom: -120px;
-  width: 520px;
-  height: 520px;
-  background: url("assets/img/logo1.png") no-repeat center / contain;
-  opacity: .10;
-  pointer-events: none;
-  z-index: 0;
-  filter: saturate(0.9);
-}
 
 /* Contenido arriba del logo */
 .gs-split__content{
@@ -999,7 +985,7 @@ body{
 .gs-split{
   background: #fff;
   position: relative;
-  overflow: hidden; /* para que el logo grande no cree scroll horizontal */
+  overflow: visible;
 }
 
 /* Wrapper: solo ancho y centrado (sin padding vertical grande) */
@@ -1126,14 +1112,6 @@ body{
     text-align: left; /* en mobile suele leerse mejor */
   }
 
-  /* El logo de fondo un poco más chico */
-  .gs-split__left::before{
-    left: -90px;
-    bottom: -140px;
-    width: 360px;
-    height: 360px;
-    opacity: .08;
-  }
 
   /* Imagen centrada y ocupando bien */
   .gs-split__right{
@@ -1213,4 +1191,25 @@ body{
   .gs-split__media img{
     object-position: center !important;
   }
+}
+
+/* Marca de agua estilo Starbucks */
+
+/* Marca de agua */
+.gs-split__left::before{
+  content:"";
+  position:absolute;
+
+  /* ✅ más cerca del texto */
+  left: -80px;
+  top: 50%;
+  transform: translateY(-35%); /* sube un toque para quedar detrás del copy */
+
+  width: 520px;
+  height: 520px;
+
+  background: url("../img/logo1.png") no-repeat center / contain;
+  opacity: .10;
+  pointer-events: none;
+  z-index: 0;
 }
