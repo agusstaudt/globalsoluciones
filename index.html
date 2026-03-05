@@ -38,6 +38,25 @@
           Tu navegador no soporta video HTML5.
         </video>
 
+        <!-- Flechas prev / next -->
+        <button
+          id="heroPrev"
+          class="hero-arrow hero-arrow--prev"
+          aria-label="Anterior"
+          type="button"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+
+        <button
+          id="heroNext"
+          class="hero-arrow hero-arrow--next"
+          aria-label="Siguiente"
+          type="button"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+
         <button
           id="volumeToggle"
           class="volume-toggle is-muted"
@@ -80,6 +99,7 @@
 				data-folder="assets/img"
 				data-images="motos1,motos2,motos3,moto4,motos5,motos6,motos7"
 				aria-label="Motos"
+				data-reveal="up" data-delay="100"
 				>
 				<img class="gs-card__img" src="assets/img/motos1.jpg" alt="Motos" loading="lazy" />
 
@@ -98,6 +118,7 @@
 				data-folder="assets/img"
 				data-images="autos1,autos2,autos3"
 				aria-label="Autos"
+				data-reveal="up" data-delay="250"
 				>
 				<img class="gs-card__img" src="assets/img/autos1.png" alt="Autos" loading="lazy" />
 
@@ -116,6 +137,7 @@
 				data-folder="assets/img"
 				data-images="electrodomésticos1,electrodomésticos2,electrodomésticos3"
 				aria-label="Hogar"
+				data-reveal="up" data-delay="400"
 				>
 				<img class="gs-card__img" src="assets/img/electrodomésticos1.jpeg" alt="Hogar" loading="lazy" />
 
@@ -134,17 +156,17 @@
 				<!-- TEXTO DE SECCION -->
 			<div class="gs-services-text">
 
-				<div class="gs-services-label">
+				<div class="gs-services-label" data-reveal="fade" data-delay="100">
 				<span class="gs-line"></span>
 				<span class="gs-label-text">Hecho en Misiones</span>
 				<span class="gs-line"></span>
 				</div>
 
-				<h2 class="gs-services-title">
+				<h2 class="gs-services-title" data-reveal="up" data-delay="200">
 				Servicios pensados para vos
 				</h2>
 
-				<p class="gs-services-description">
+				<p class="gs-services-description" data-reveal="up" data-delay="320">
 				Te acompañamos para que accedas a tu moto o vehículo
 				con planes accesibles, simples y claros.
 				</p>
@@ -157,7 +179,7 @@
 		<div class="gs-split__wrap">
 			<div class="gs-split__inner">
 			<div class="gs-split__left">
-				<div class="gs-split__content">
+				<div class="gs-split__content" data-reveal="left">
 				<h2 class="gs-split__title">¿Quiénes somos?</h2>
 				<p class="gs-split__text">
 					Somos una empresa que ofrece soluciones en financiación, consultoría y gestión,
@@ -167,7 +189,7 @@
 				</div>
 			</div>
 
-			<div class="gs-split__right gs-split__right--bleed">
+			<div class="gs-split__right gs-split__right--bleed" data-reveal="right">
 				<div class="gs-split__media" data-folder="assets/img"
 					data-images="quienes_somos1,quienes_somos2,quienes_somos3,quienes_somos4,quienes_somos5,quienes_somos6">
 				<img class="gs-split__img" src="assets/img/quienes_somos1.jpg" alt="Global Soluciones - Quiénes somos" />
