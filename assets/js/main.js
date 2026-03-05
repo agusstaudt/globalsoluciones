@@ -255,7 +255,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (heroMoreBtn && nextSectionEl) {
     heroMoreBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      const y = nextSectionEl.getBoundingClientRect().top + window.pageYOffset;
+      // Scroll exacto al top de la sección para que llene 100vh
+      const y = Math.round(nextSectionEl.getBoundingClientRect().top + window.pageYOffset);
       smoothScrollTo(y, SCROLL_DURATION_MS);
     });
   }

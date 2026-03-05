@@ -15,6 +15,8 @@
 html, body{
   min-height: 100%;
   overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 }
 
 body{
@@ -54,6 +56,7 @@ body{
 .hero-header{
   position:relative;
   height:100vh;
+  scroll-snap-align: start;
   min-height:600px;
   background: var(--bg-base);
 }
@@ -648,20 +651,29 @@ body{
    ========================= */
 
 .gs-services{
-  padding: 80px 0;
-  background: #f3efe8; /* o el fondo que elijas */
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: #f3efe8;
+  scroll-snap-align: start;
 }
 
 .gs-services__inner{
   max-width: 1180px;
   margin: 0 auto;
-  padding: 0 22px;
+  padding: 40px 22px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 48px;
 }
 
 .gs-cards{
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
+  grid-template-columns: repeat(3, minmax(0, 800px));
+  justify-content: center;
+  gap: 28px;
 }
 
 @media (max-width: 980px){
@@ -687,7 +699,7 @@ body{
 /* IMG */
 .gs-card__img{
   width: 100%;
-  height: 520px;
+  height: clamp(380px, 52vh, 560px);
   display: block;
   object-fit: cover;
   object-position: center;
@@ -884,6 +896,7 @@ body{
 
 
 
+
 /* =========================
    GS SPLIT (¿Quiénes somos?)
    ========================= */
@@ -892,6 +905,7 @@ body{
   background: #fff;
   position: relative;
   overflow: hidden;
+  scroll-snap-align: start;
 }
 
 /* El wrapper NO limita el ancho — el grid ocupa todo */
@@ -907,7 +921,7 @@ body{
   grid-template-columns: 1.25fr 0.75fr;
   gap: 0;
   align-items: stretch;
-  min-height: 620px;
+  min-height: 1000px;
   width: 100%;
 }
 
