@@ -347,3 +347,79 @@ document.addEventListener("DOMContentLoaded", () => {
     initCard(card);
   });
 });
+
+// =========================
+// FIN Cards
+// =========================
+
+
+
+// =========================
+// GS Split: rotación de imágenes (Quiénes somos)
+// =========================
+document.addEventListener("DOMContentLoaded", () => {
+  const EXT = ["jpg", "jpeg", "png", "webp"];
+  const INTERVAL_MS = 3200;
+  const FADE_MS = 450;
+
+  function imgExists(url) {
+    return new Promise((resolve) => {
+      const im = new Image();
+      im.onload = () => resolve(true);
+      im.onerror = () => resolve(false);
+      im.src = url;
+    });
+  }
+
+  async function resolveAnyExt(folder, name) {
+    for (const ext of EXT) {
+      const url = `${folder}/${name}.${ext}`;
+      // eslint-disable-next-line no-await-in-loop
+      if (await imgExists(url)) return url;
+    }
+    return null;
+  }
+
+  async function initSplitRotator(container) {
+    const folder = container.dataset.folder || "assets/img";
+    const names = (container.dataset.images || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    if (!names.length) return;
+
+    const urls = [];
+    for (const n of names) {
+      // eslint-disable-next-line no-await-in-loop
+      const u = await resolveAnyExt(folder, n);
+      if (u) urls.push(u);
+    }
+    if (urls.length <= 1) return;
+
+    const img = container.querySelector("img");
+    if (!img) return;
+
+    // setea la primera encontrada (por si el src inicial no coincide)
+    img.src = urls[0];
+
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % urls.length;
+
+      img.classList.add("is-fading");
+
+      setTimeout(() => {
+        img.src = urls[i];
+        img.onload = () => {
+          img.classList.remove("is-fading");
+        };
+        // fallback por si cache
+        setTimeout(() => img.classList.remove("is-fading"), 80);
+      }, FADE_MS);
+    }, INTERVAL_MS);
+  }
+
+  const splitMedia = document.querySelector(".gs-split__media[data-images]");
+  if (splitMedia) initSplitRotator(splitMedia);
+});
