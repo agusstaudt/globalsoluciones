@@ -338,7 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // =========================
   // Scroll suave SABER MÁS
   // =========================
-  const SCROLL_DURATION_MS = 2200;
+  const SCROLL_DURATION_MS = 1000;
 
   function smoothScrollTo(targetY, duration = 1600) {
     const startY = window.pageYOffset;
