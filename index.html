@@ -35,6 +35,21 @@
             <span class="nav-cart__badge">0</span>
           </a>
 
+          <!-- Burger (solo mobile) -->
+          <button class="nav-burger" aria-label="Menú" aria-expanded="false" aria-controls="mobile-menu">
+            <span class="nav-burger__bar"></span>
+            <span class="nav-burger__bar"></span>
+            <span class="nav-burger__bar"></span>
+          </button>
+
+        </div>
+
+        <!-- Menú desplegable mobile -->
+        <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+          <ul class="mobile-menu__links">
+            <li><a href="#">Tienda</a></li>
+            <li><a href="#">Mi cuenta</a></li>
+          </ul>
         </div>
       </nav>
 
@@ -265,6 +280,94 @@
 				</div>
 
 			</div>
+		</div>
+	</section>
+
+	<section id="faq" class="gs-faq" aria-labelledby="faq-title">
+		<div class="gs-faq__inner">
+
+			<!-- Columna izquierda: título + acordeón -->
+			<div class="gs-faq__left">
+
+				<div class="gs-faq__head" data-reveal="up">
+					<div class="gs-faq__label">
+						<span class="gs-faq__label-line"></span>
+						<span class="gs-faq__label-text">Lo que quizás te preguntás</span>
+						<span class="gs-faq__label-line"></span>
+					</div>
+					<h2 class="gs-faq__title" id="faq-title">Preguntas<br>Frecuentes</h2>
+				</div>
+
+				<div class="gs-faq__list" data-reveal="up" data-delay="150">
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Qué es Global Soluciones?</summary>
+						<div class="faq-item__a">
+							Global Soluciones es una empresa de servicios con sucursales en Oberá y Posadas,
+							que ofrece financiaciones accesibles, asesoramiento y gestión a todos sus usuarios
+							llegando así al norte y sur de la provincia.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Cómo puedo suscribirme?</summary>
+						<div class="faq-item__a">
+							Afiliarse es muy fácil. Solo necesitas presentar tu DNI, sin necesidad de garantes,
+							recibo de sueldo ni historial crediticio favorable.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Cuáles son los beneficios de ser cliente?</summary>
+						<div class="faq-item__a">
+							Nuestros clientes pueden acceder a financiaciones para la compra de productos del
+							hogar, motos y autos con mínimos requisitos y cuotas accesibles. Con el tiempo,
+							obtienen más ventajas y facilidades.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Puedo financiar si estoy en Veraz o no tengo recibo de sueldo?</summary>
+						<div class="faq-item__a">
+							Sí. En Global Soluciones no tomamos en cuenta el historial en Veraz ni exigimos
+							recibos de sueldo. Solo necesitas ser cliente para acceder a una financiación.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Cómo funciona la financiación?</summary>
+						<div class="faq-item__a">
+							Elegís un producto de la cartera, realizamos una evaluación rápida de tu solicitud
+							y, una vez aprobada, recibís el producto con un plan de pagos accesible.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Puedo cancelar mi suscripción cuando quiera?</summary>
+						<div class="faq-item__a">
+							Sí, ofrecemos la opción de cancelación anticipada. Para conocer más detalles,
+							podés comunicarte con nosotros.
+						</div>
+					</details>
+
+					<details class="faq-item">
+						<summary class="faq-item__q">¿Cómo puedo contactar a Global Soluciones?</summary>
+						<div class="faq-item__a">
+							Podés visitarnos en nuestras sucursales de Oberá y Posadas o comunicarte a través
+							de nuestros canales de atención.
+						</div>
+					</details>
+
+				</div>
+			</div>
+
+			<!-- Columna derecha: imagen full-bleed -->
+			<div class="gs-faq__right" data-reveal="right">
+				<div class="gs-faq__media">
+					<img src="assets/img/preguntas_frecuentes.jpg" alt="Global Soluciones" class="gs-faq__img" loading="lazy"/>
+				</div>
+			</div>
+
 		</div>
 	</section>
     <script src="assets/js/main.js"></script>
