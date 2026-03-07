@@ -560,3 +560,60 @@ document.addEventListener("DOMContentLoaded", () => {
   targets.forEach(el => observer.observe(el));
 });
 /// ================================= FIN SCROLL REVEAL =====================================================
+/// ================================= FAQ ACORDEÓN =====================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const items = document.querySelectorAll(".faq-item");
+  if (!items.length) return;
+
+  items.forEach(item => {
+    item.addEventListener("toggle", () => {
+      // Al abrir uno, cerrar todos los demás
+      if (item.open) {
+        items.forEach(other => {
+          if (other !== item && other.open) other.open = false;
+        });
+      }
+    });
+  });
+});
+/// ================================= FIN FAQ =====================================================
+
+/// ================================= BURGER MENU =====================================================
+(function(){
+  const burger  = document.querySelector(".nav-burger");
+  const menu    = document.getElementById("mobile-menu");
+  if (!burger || !menu) return;
+
+  function openMenu(){
+    burger.classList.add("is-open");
+    menu.classList.add("is-open");
+    burger.setAttribute("aria-expanded", "true");
+    menu.setAttribute("aria-hidden", "false");
+  }
+
+  function closeMenu(){
+    burger.classList.remove("is-open");
+    menu.classList.remove("is-open");
+    burger.setAttribute("aria-expanded", "false");
+    menu.setAttribute("aria-hidden", "true");
+  }
+
+  burger.addEventListener("click", (e) => {
+    e.stopPropagation();
+    burger.classList.contains("is-open") ? closeMenu() : openMenu();
+  });
+
+  // Cerrar al hacer click fuera
+  document.addEventListener("click", (e) => {
+    if (!menu.contains(e.target) && !burger.contains(e.target)){
+      closeMenu();
+    }
+  });
+
+  // Cerrar al hacer click en un link
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", closeMenu));
+
+  // Cerrar al hacer scroll
+  window.addEventListener("scroll", closeMenu, { passive: true });
+})();
+/// ================================= FIN BURGER =====================================================
