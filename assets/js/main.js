@@ -617,3 +617,53 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", closeMenu, { passive: true });
 })();
 /// ================================= FIN BURGER =====================================================
+
+/// ================================= TESTIMONIOS CAROUSEL =====================================================
+document.addEventListener("DOMContentLoaded", function(){
+  const track    = document.getElementById("testi-track");
+  const bulletsEl = document.getElementById("testi-bullets");
+  if (!track || !bulletsEl) return;
+
+  const slides = Array.from(track.querySelectorAll(".gs-testimonial"));
+  const total  = slides.length;
+  if (!total) return;
+
+  let current = 0;
+  let timer   = null;
+  const AUTOPLAY_MS = 5000;
+
+  // Crear bullets
+  slides.forEach((_, i) => {
+    const b = document.createElement("button");
+    b.setAttribute("aria-label", "Ver testimonio " + (i + 1));
+    b.setAttribute("type", "button");
+    if (i === 0) b.classList.add("is-active");
+    b.addEventListener("click", () => goTo(i));
+    bulletsEl.appendChild(b);
+  });
+
+  function goTo(idx) {
+    current = ((idx % total) + total) % total;
+    track.style.transform = "translateX(-" + (current * 100) + "%)";
+    bulletsEl.querySelectorAll("button").forEach((b, i) => {
+      b.classList.toggle("is-active", i === current);
+    });
+    resetTimer();
+  }
+
+  function resetTimer() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo(current + 1), AUTOPLAY_MS);
+  }
+
+  // Swipe táctil
+  let startX = 0;
+  track.addEventListener("touchstart", e => { startX = e.touches[0].clientX; }, { passive: true });
+  track.addEventListener("touchend", e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+  });
+
+  resetTimer();
+});
+/// ================================= FIN TESTIMONIOS =====================================================
