@@ -379,48 +379,57 @@
 			<h2 class="gs-testimonials__title" id="testi-title" data-reveal="up" data-delay="100">Clientes que cuentan su experiencia</h2>
 			<span class="gs-testimonials__rule" aria-hidden="true" data-reveal="fade" data-delay="200"></span>
 
-			<!-- Carousel testimonios -->
-			<div class="gs-testimonials__carousel" data-reveal="up" data-delay="200">
-				<div class="gs-testimonials__track" id="testi-track">
+			<!-- Carousel testimonios — estilo tarjetas apiladas -->
+			<div class="gs-testimonials__stack-wrap" data-reveal="up" data-delay="200">
+				<div class="gs-testimonials__stack" id="testi-stack">
 
-					<article class="gs-testimonial">
-						<div class="gs-testimonial__quote">"</div>
-						<p class="gs-testimonial__text">Gracias a Global Soluciones, pude comprar la motocicleta que siempre quise con un plan de financiamiento accesible y cuotas cómodas. El proceso fue rápido y sin trámites engorrosos.</p>
-						<footer class="gs-testimonial__footer">
-							<img class="gs-testimonial__avatar" src="assets/img/IMG-20250305-WA0039.jpg" alt="Foto de Victor Suarez" width="56" height="56" loading="lazy" decoding="async"/>
-							<div class="gs-testimonial__who">
-								<strong class="gs-testimonial__name">Victor Suarez</strong>
-								<span class="gs-testimonial__role">Cliente Satisfecho</span>
+					<article class="gs-testimonial-card" data-index="0">
+						<div class="gs-testimonial-card__quote"><img src="assets/img/quotes.svg" alt="" class="gs-quote-img"></div>
+						<p class="gs-testimonial-card__text">Gracias a Global Soluciones, pude comprar la motocicleta que siempre quise con un plan de financiamiento accesible y cuotas cómodas. El proceso fue rápido y sin trámites engorrosos."</p>
+						<footer class="gs-testimonial-card__footer">
+							<img class="gs-testimonial-card__avatar" src="assets/img/IMG-20250305-WA0039.jpg" alt="Foto de Victor Suarez" width="64" height="64" loading="lazy" decoding="async"/>
+							<div class="gs-testimonial-card__who">
+								<strong class="gs-testimonial-card__name">Victor Suarez</strong>
+								<span class="gs-testimonial-card__role">Cliente Satisfecho</span>
 							</div>
 						</footer>
 					</article>
 
-					<article class="gs-testimonial">
-						<div class="gs-testimonial__quote">"</div>
-						<p class="gs-testimonial__text">Comparé varias opciones antes de decidirme, y Global Soluciones fue la mejor en términos de flexibilidad y tasas. Ahora disfruto de mi moto nueva sin preocuparme por pagos excesivos. ¡Excelente servicio!</p>
-						<footer class="gs-testimonial__footer">
-							<img class="gs-testimonial__avatar" src="assets/img/IMG-20250307-WA0165.jpg" alt="Foto de Carla Gómez" width="56" height="56" loading="lazy" decoding="async"/>
-							<div class="gs-testimonial__who">
-								<strong class="gs-testimonial__name">Carla Gómez</strong>
-								<span class="gs-testimonial__role">Conductora Independiente</span>
+					<article class="gs-testimonial-card" data-index="1">
+						<div class="gs-testimonial-card__quote"><img src="assets/img/quotes.svg" alt="" class="gs-quote-img"></div>
+						<p class="gs-testimonial-card__text">Comparé varias opciones antes de decidirme, y Global Soluciones fue la mejor en términos de flexibilidad y tasas. Ahora disfruto de mi moto nueva sin preocuparme por pagos excesivos. ¡Excelente servicio!"</p>
+						<footer class="gs-testimonial-card__footer">
+							<img class="gs-testimonial-card__avatar" src="assets/img/IMG-20250307-WA0165.jpg" alt="Foto de Carla Gómez" width="64" height="64" loading="lazy" decoding="async"/>
+							<div class="gs-testimonial-card__who">
+								<strong class="gs-testimonial-card__name">Carla Gómez</strong>
+								<span class="gs-testimonial-card__role">Conductora Independiente</span>
 							</div>
 						</footer>
 					</article>
 
-					<article class="gs-testimonial">
-						<div class="gs-testimonial__quote">"</div>
-						<p class="gs-testimonial__text">Necesitaba una motocicleta para mi trabajo, pero no tenía todo el dinero de contado. Global Soluciones me ofreció un plan a mi medida con pagos accesibles y sin sorpresas. Hoy puedo trabajar con mayor comodidad.</p>
-						<footer class="gs-testimonial__footer">
-							<img class="gs-testimonial__avatar" src="assets/img/IMG-20250307-WA0079-scaled.jpg" alt="Foto de Luis Ramírez" width="56" height="56" loading="lazy" decoding="async"/>
-							<div class="gs-testimonial__who">
-								<strong class="gs-testimonial__name">Luis Ramírez</strong>
-								<span class="gs-testimonial__role">Repartidor</span>
+					<article class="gs-testimonial-card" data-index="2">
+						<div class="gs-testimonial-card__quote"><img src="assets/img/quotes.svg" alt="" class="gs-quote-img"></div>
+						<p class="gs-testimonial-card__text">Necesitaba una motocicleta para mi trabajo, pero no tenía todo el dinero de contado. Global Soluciones me ofreció un plan a mi medida con pagos accesibles y sin sorpresas. Hoy puedo trabajar con mayor comodidad."</p>
+						<footer class="gs-testimonial-card__footer">
+							<img class="gs-testimonial-card__avatar" src="assets/img/IMG-20250307-WA0079-scaled.jpg" alt="Foto de Luis Ramírez" width="64" height="64" loading="lazy" decoding="async"/>
+							<div class="gs-testimonial-card__who">
+								<strong class="gs-testimonial-card__name">Luis Ramírez</strong>
+								<span class="gs-testimonial-card__role">Repartidor</span>
 							</div>
 						</footer>
 					</article>
 
 				</div>
-				<div class="gs-testimonials__bullets" id="testi-bullets" aria-label="Paginación de testimonios"></div>
+
+				<!-- Flechas navegación -->
+				<div class="gs-testimonials__nav">
+					<button class="gs-testimonials__arrow" id="testi-prev" aria-label="Testimonio anterior">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="11 18 5 12 11 6"/></svg>
+					</button>
+					<button class="gs-testimonials__arrow" id="testi-next" aria-label="Siguiente testimonio">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+					</button>
+				</div>
 			</div>
 
 			<!-- Separador entregas -->

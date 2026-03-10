@@ -618,36 +618,91 @@ document.addEventListener("DOMContentLoaded", () => {
 })();
 /// ================================= FIN BURGER =====================================================
 
-/// ================================= TESTIMONIOS CAROUSEL =====================================================
-document.addEventListener("DOMContentLoaded", function(){
-  const track    = document.getElementById("testi-track");
-  const bulletsEl = document.getElementById("testi-bullets");
-  if (!track || !bulletsEl) return;
+/// ================================= TESTIMONIOS CAROUSEL (STACK) =====================================================
+document.addEventListener("DOMContentLoaded", function () {
+  const stack   = document.getElementById("testi-stack");
+  const prevBtn = document.getElementById("testi-prev");
+  const nextBtn = document.getElementById("testi-next");
+  if (!stack) return;
 
-  const slides = Array.from(track.querySelectorAll(".gs-testimonial"));
-  const total  = slides.length;
+  const cards = Array.from(stack.querySelectorAll(".gs-testimonial-card"));
+  const total = cards.length;
   if (!total) return;
 
-  let current = 0;
-  let timer   = null;
-  const AUTOPLAY_MS = 5000;
+  let current   = 0;
+  let animating = false;
+  let timer     = null;
 
-  // Crear bullets
-  slides.forEach((_, i) => {
-    const b = document.createElement("button");
-    b.setAttribute("aria-label", "Ver testimonio " + (i + 1));
-    b.setAttribute("type", "button");
-    if (i === 0) b.classList.add("is-active");
-    b.addEventListener("click", () => goTo(i));
-    bulletsEl.appendChild(b);
-  });
+  const AUTOPLAY_MS = 5500;
+  const RISE_MS     = 780;  // duración de gs-card-rise
+  const LAND_MS     = 900;  // duración de gs-card-land
 
-  function goTo(idx) {
-    current = ((idx % total) + total) % total;
-    track.style.transform = "translateX(-" + (current * 100) + "%)";
-    bulletsEl.querySelectorAll("button").forEach((b, i) => {
-      b.classList.toggle("is-active", i === current);
+  const ALL = ["is-front","is-back-1","is-back-2","anim-rise","anim-land","anim-out"];
+
+  function clear(card) {
+    card.classList.remove(...ALL);
+    card.style.cssText = "";
+  }
+
+  function applyStatic() {
+    cards.forEach((card, i) => {
+      clear(card);
+      const offset = ((i - current) % total + total) % total;
+      if      (offset === 0) card.classList.add("is-front");
+      else if (offset === 1) card.classList.add("is-back-1");
+      else if (offset === 2) card.classList.add("is-back-2");
     });
+  }
+
+  function goTo(next) {
+    if (animating) return;
+    animating = true;
+
+    const prevIdx  = current;
+    const nextIdx  = ((next % total) + total) % total;
+    const incoming = cards[nextIdx]; // va a aparecer adelante
+    const outgoing = cards[prevIdx]; // estaba adelante
+    current = nextIdx;
+
+    // Las demás van a sus posiciones sin animación
+    cards.forEach((card, i) => {
+      if (i === prevIdx || i === nextIdx) return;
+      clear(card);
+      const offset = ((i - nextIdx) % total + total) % total;
+      if      (offset === 1) card.classList.add("is-back-1");
+      else if (offset === 2) card.classList.add("is-back-2");
+    });
+
+    // Limpiar ambas tarjetas
+    incoming.classList.remove(...ALL);
+    incoming.style.cssText = "";
+    outgoing.classList.remove(...ALL);
+    outgoing.style.cssText = "";
+    void incoming.offsetWidth;
+
+    // ── FASE 1: incoming sube con z-index BAJO (detrás del frente) ──
+    // outgoing se queda al frente visible mientras incoming sube por detrás
+    outgoing.classList.add("is-front"); // se queda al frente
+    incoming.classList.add("anim-rise"); // sube por detrás, z-index:2
+
+    // ── FASE 2: cuando termina de subir → incoming baja con z-index ALTO ──
+    // y outgoing empieza a desvanecerse
+    setTimeout(() => {
+      incoming.classList.remove("anim-rise");
+      void incoming.offsetWidth; // reflow para reiniciar animación
+      incoming.classList.add("anim-land"); // baja al frente, z-index:10
+
+      outgoing.classList.remove("is-front");
+      outgoing.classList.add("anim-out"); // se desvanece hacia atrás, z-index:1
+
+      // ── Limpieza final ──
+      setTimeout(() => {
+        applyStatic();
+        animating = false;
+      }, LAND_MS + 80);
+
+    }, RISE_MS);
+
     resetTimer();
   }
 
@@ -656,14 +711,17 @@ document.addEventListener("DOMContentLoaded", function(){
     timer = setInterval(() => goTo(current + 1), AUTOPLAY_MS);
   }
 
-  // Swipe táctil
+  if (nextBtn) nextBtn.addEventListener("click", () => goTo(current + 1));
+  if (prevBtn) prevBtn.addEventListener("click", () => goTo(current - 1));
+
   let startX = 0;
-  track.addEventListener("touchstart", e => { startX = e.touches[0].clientX; }, { passive: true });
-  track.addEventListener("touchend", e => {
+  stack.addEventListener("touchstart", e => { startX = e.touches[0].clientX; }, { passive: true });
+  stack.addEventListener("touchend", e => {
     const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 40) goTo(current + (dx < 0 ? 1 : -1));
+    if (Math.abs(dx) > 40) dx < 0 ? goTo(current + 1) : goTo(current - 1);
   });
 
+  applyStatic();
   resetTimer();
 });
 /// ================================= FIN TESTIMONIOS =====================================================
