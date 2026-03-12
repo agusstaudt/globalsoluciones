@@ -311,6 +311,22 @@ body{
     drop-shadow(0 0 18px rgba(176,138,59,.18));
 }
 
+
+@media (max-width: 600px) {
+  .logo-final {
+    width: 200px;
+  }
+  .video-end-overlay.is-docked::after {
+    width: 90px;
+    height: 90px;
+    left: 20px;
+    bottom: 20px;
+  }
+  .video-end-overlay.is-docked {
+    padding: 0 0 20px 20px;
+  }
+}
+
 /* Si todavía existe overlay-note en tu HTML, lo ocultamos */
 .overlay-note{ display:none !important; }
 
