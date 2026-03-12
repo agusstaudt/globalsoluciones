@@ -18,6 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const SLIDE_MS = 3200;
 
+  // Playlist de videos
+  const VIDEO_PLAYLIST = [
+    "assets/videos/video_global.mp4",
+    "assets/videos/video_auto.mp4",
+    "assets/videos/video_moto.mp4"
+  ];
+  let videoIndex = 0;
+
+
   // cuánto tiempo queda el logo grande (antes de pasar a chico)
   const HOLD_CENTER_MS = 6000;
 
@@ -247,15 +256,25 @@ document.addEventListener("DOMContentLoaded", () => {
   // Precargar lista de imágenes en background para que al hacer click ya esté lista
   buildImagesList().catch(() => {});
 
+  // Helper para cambiar de video
+  function goToVideo(idx) {
+    if (idx >= VIDEO_PLAYLIST.length) { transitionToSlideshow(); return; }
+    if (idx < 0) idx = 0;
+    videoIndex = idx;
+    video.src = VIDEO_PLAYLIST[videoIndex];
+    video.load();
+    video.play().catch(() => {});
+  }
+
   if (nextBtn) {
     nextBtn.addEventListener("click", async () => {
-      // Si el slideshow todavía no está visible → el video está activo, saltar al slideshow
       const slideshowActive = slideshowEl && slideshowEl.classList.contains("is-visible");
       if (!slideshowActive) {
-        await transitionToSlideshow();
+        // Video activo → siguiente video (o slideshow si era el último)
+        goToVideo(videoIndex + 1);
         return;
       }
-      // Ya estamos en el slideshow → slide siguiente
+      // Slideshow → slide siguiente
       if (slides.length) {
         pauseAutoplay();
         goToSlide(current + 1);
@@ -291,6 +310,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (volumeBtn) volumeBtn.classList.remove("is-hidden");
 
     // Reiniciar video desde el principio
+    videoIndex = 0;
+    video.src = VIDEO_PLAYLIST[0];
+    video.load();
     video.currentTime = 0;
     video.play().catch(() => {});
 
@@ -306,9 +328,14 @@ document.addEventListener("DOMContentLoaded", () => {
   if (prevBtn) {
     prevBtn.addEventListener("click", async () => {
       const slideshowActive = slideshowEl && slideshowEl.classList.contains("is-visible");
-      // Si el slideshow no está visible → video activo → retroceder 8 segundos
       if (!slideshowActive) {
-        if (video) video.currentTime = Math.max(0, video.currentTime - 8);
+        // Video activo → video anterior o reiniciar actual
+        if (videoIndex > 0) {
+          goToVideo(videoIndex - 1);
+        } else {
+          video.currentTime = 0;
+          video.play().catch(() => {});
+        }
         return;
       }
       // Slideshow activo: primer slide → volver al video
@@ -322,12 +349,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (video) video.addEventListener("ended", transitionToSlideshow);
-
+  // Playlist: al terminar cada video pasa al siguiente, luego al slideshow
   if (video) {
-    video.addEventListener("timeupdate", () => {
-      if (!video.duration) return;
-      if (video.currentTime >= video.duration - 0.25) transitionToSlideshow();
+    video.addEventListener("ended", async () => {
+      videoIndex++;
+      if (videoIndex < VIDEO_PLAYLIST.length) {
+        video.src = VIDEO_PLAYLIST[videoIndex];
+        video.load();
+        video.play().catch(() => {});
+      } else {
+        await transitionToSlideshow();
+      }
     });
   }
 
@@ -617,6 +649,22 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", closeMenu, { passive: true });
 })();
 /// ================================= FIN BURGER =====================================================
+
+
+/// ================================= MARCAS CARRUSEL =====================================================
+document.addEventListener("DOMContentLoaded", () => {
+  const track = document.getElementById("brandsTrack");
+  if (!track) return;
+
+  // Duplicar los items para scroll infinito continuo
+  const items = Array.from(track.children);
+  items.forEach(item => {
+    const clone = item.cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    track.appendChild(clone);
+  });
+});
+/// ================================= FIN MARCAS =====================================================
 
 /// ================================= TESTIMONIOS CAROUSEL (STACK) =====================================================
 document.addEventListener("DOMContentLoaded", function () {
