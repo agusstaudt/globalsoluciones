@@ -274,16 +274,20 @@ document.addEventListener("DOMContentLoaded", () => {
         goToVideo(videoIndex + 1);
         return;
       }
-      // Slideshow → slide siguiente
+      // Slideshow → slide siguiente, o volver al primer video si era el último
       if (slides.length) {
         pauseAutoplay();
-        goToSlide(current + 1);
+        if (current === slides.length - 1) {
+          backToVideo(0);  // volver al primer video
+        } else {
+          goToSlide(current + 1);
+        }
       }
     });
   }
 
-  // Volver al video desde el slideshow
-  function backToVideo() {
+  // Volver al video desde el slideshow (idx = índice del video destino, default 0)
+  function backToVideo(idx = 0) {
     if (!video) return;
 
     // Detener autoplay de slides
@@ -309,9 +313,9 @@ document.addEventListener("DOMContentLoaded", () => {
     video.classList.remove("is-hidden");
     if (volumeBtn) volumeBtn.classList.remove("is-hidden");
 
-    // Reiniciar video desde el principio
-    videoIndex = 0;
-    video.src = VIDEO_PLAYLIST[0];
+    // Cargar el video destino
+    videoIndex = idx;
+    video.src = VIDEO_PLAYLIST[videoIndex];
     video.load();
     video.currentTime = 0;
     video.play().catch(() => {});
@@ -338,9 +342,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         return;
       }
-      // Slideshow activo: primer slide → volver al video
+      // Slideshow activo: primer slide → ir al último video
       if (current === 0) {
-        backToVideo();
+        backToVideo(VIDEO_PLAYLIST.length - 1);
         return;
       }
       // Slideshow activo: otro slide → slide anterior
